@@ -1,7 +1,7 @@
 {
-  "pluginAlias": "ExampleHomebridgePlugin",
+  "pluginAlias": "Infinitive",
   "pluginType": "platform",
-  "singular": true,
+  "singular": false,
   "schema": {
     "type": "object",
     "properties": {
@@ -9,7 +9,29 @@
         "title": "Name",
         "type": "string",
         "required": true,
-        "default": "Example Dynamic Platform"
+        "default": "Infinitive HVAC"
+      },
+      "url": {
+        "title": "Server URL",
+        "type": "string",
+        "required": true,
+        "default": "http://infinitive"
+      },
+      "username": {
+        "title": "Server Username",
+        "type": "string",
+        "required": false
+      },
+      "password": {
+        "title": "Server Password",
+        "type": "string",
+        "required": false
+      },
+      "includeOutdoorSensors": {
+        "title": "Include Outdoor Temperature & Humidity Sensors",
+        "type": "boolean",
+        "required": true,
+        "default": true
       }
     }
   }
