@@ -23,6 +23,10 @@ exposes the following features to
 - Can optionally expose sensors representing outdoor temperature and humidity, measured at your HVAC cabinet.
 - Voice control and automation via standard HomeKit features.
 
+These features aren't implemented just yet:
+
+- Non-HomeKit updates made to your HVAC system (through the thermostat or Infinitive API, for example) will not immediately push an update to HomeKit.
+
 The following features are not supported:
 
 - Thermostat-level scheduling or vacation mode. These are best done via HomeKit.
@@ -51,6 +55,7 @@ To manually configure the plugin, insert a section into your config with the
 following fields:
 
 | Field      | Value                                                            |
+| ---------- | ---------------------------------------------------------------- |
 | `platform` | Must be `infinitive`                                             |
 | `name`     | A friendly name for the thermostat                               |
 | `url`      | The base URL for the Infinitive server (IE, `http://infinitive`) |
