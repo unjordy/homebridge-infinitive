@@ -2,7 +2,7 @@
   "displayName": "Infinitive",
   "name": "homebridge-infinitive",
   "author": "Jordan Mulcahey",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Homebridge plugin for the Infinitive HVAC control server",
   "license": "Apache-2.0",
   "repository": {
