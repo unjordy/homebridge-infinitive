@@ -1,10 +1,11 @@
-import { Service, CharacteristicValue } from 'homebridge';
+import { Service, CharacteristicValue, Logger } from 'homebridge';
 import Qty from 'js-quantities';
 
 import { InfinitivePlatform } from './platform';
 import { Infinitive } from './infinitive';
 
 export class Thermostat {
+  private readonly log: Logger;
   private informationService: Service;
   private service: Service;
 
@@ -24,6 +25,8 @@ export class Thermostat {
       CoolingThresholdTemperature,
       HeatingThresholdTemperature,
     } = this.platform.api.hap.Characteristic;
+
+    this.log = this.platform.log;
 
     this.informationService = new this.platform.api.hap.Service.AccessoryInformation()
       .setCharacteristic(this.platform.api.hap.Characteristic.Manufacturer, 'Carrier')
@@ -102,7 +105,13 @@ export class Thermostat {
           CurrentHeatingCoolingState.COOL :
           CurrentHeatingCoolingState.OFF;
       default:
-        throw new Error('Invalid HeatingCoolingState ${mode}');
+        if (currentTemp < heatSetpoint) {
+          return CurrentHeatingCoolingState.HEAT;
+        } else if (currentTemp > coolSetpoint) {
+          return CurrentHeatingCoolingState.COOL;
+        } else {
+          return CurrentHeatingCoolingState.OFF;
+        }
     }
   }
 
@@ -124,7 +133,10 @@ export class Thermostat {
       case 'auto':
         return TargetHeatingCoolingState.AUTO;
       default:
-        throw new Error(`Invalid HeatingCoolingState ${mode}`);
+        this.log.error(`Invalid HeatingCoolingState ${mode}`);
+        throw new this.platform.api.hap.HapStatusError(
+          this.platform.api.hap.HAPStatus.SERVICE_COMMUNICATION_FAILURE,
+        );
     }
   }
 
@@ -162,7 +174,10 @@ export class Thermostat {
         this.infinitive.setThermostatState({ mode: 'auto', ...baseState });
         break;
       default:
-        throw new Error(`Invalid HeatingCoolingState ${state}`);
+        this.log.error(`Invalid HeatingCoolingState ${state}`);
+        throw new this.platform.api.hap.HapStatusError(
+          this.platform.api.hap.HAPStatus.SERVICE_COMMUNICATION_FAILURE,
+        );
     }
 
     this.service.updateCharacteristic(
@@ -199,7 +214,10 @@ export class Thermostat {
       case 'cool':
         return Qty(coolSetpoint, 'tempF').to('tempC').scalar;
       default:
-        throw new Error(`Invalid thermostat mode ${mode}`);
+        this.log.error(`Invalid thermostat mode ${mode}`);
+        throw new this.platform.api.hap.HapStatusError(
+          this.platform.api.hap.HAPStatus.SERVICE_COMMUNICATION_FAILURE,
+        );
     }
   }
 
